@@ -28,13 +28,17 @@ import React from "react";
 import Home from "./pages/Home";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import SimpleScatterPlot from "./components/SimpleScatterPlot";
+import ApiCommunication from "./services/ApiCommunication";
 
 const App = () => {
   return (
     <div>
-      <Header />
-      <Home />
-      <Footer />
+      {/* <Header />
+      <Home /> */}
+      {/* <SimpleScatterPlot /> */}
+      <ApiCommunication />
+      {/* <Footer /> */}
     </div>
   );
 };
