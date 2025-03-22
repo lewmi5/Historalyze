@@ -48,7 +48,7 @@ public class ApiController {
     }
 
     @PostMapping("/prices")
-    public ResponseEntity<Map<String, Object>> getStockPrices(@RequestBody Map<String, Object> payload) {
+    public ResponseEntity<Map<String, Object>> getStockPrices(@RequestBody Map<String, Object> payload) throws IOException {
         // Process the data received from React
         Map<String, Object> response = new HashMap<>();
 
@@ -64,8 +64,13 @@ public class ApiController {
         System.out.println(name);
         response.put("received", payload);
         response.put("status", "success");
+        String stockPath = "stocksdata/" + name.toString() + ".csv";
+        Path path = Paths.get(stockPath);
+        if(!Files.exists(path)) {
+            StockPriceDownloader.downloadHistoricalData(name.toString());
+        }
 
-        Path path = Paths.get("stocksdata/" + name.toString() + ".csv");
+
         String content;
         try {
             content = Files.readString(path);
@@ -77,6 +82,8 @@ public class ApiController {
         response.put("content", content);
         return ResponseEntity.ok(response);
     }
+
+
 
     @PostMapping("/submit")
     public ResponseEntity<Map<String, Object>> submitData(@RequestBody Map<String, Object> payload) {
