@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import StockForm from './components/StockForm';
 import StockPlot from './components/StockPlot';
+import Analytics from './components/Analytics';
 import { fetchStockData } from './services/apiService';
+import { fetchStrategyDescription } from './services/apiService';
 
 const App = () => {
   const [stockData, setStockData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [currentStock, setCurrentStock] = useState('');
+  const [currentStrategy, setCurrentStrategy] = useState('');
+  const [currentStrategyDescription, setCurrentStrategyDescription] = useState('');
 
   const handleStockSubmit = async (stockName) => {
     try {
@@ -31,6 +35,29 @@ const App = () => {
     }
   };
 
+  const handleStrategySubmit = async (strategyName) => {
+    try {
+      setError(null);
+      setLoading(true);
+      setCurrentStrategy(strategyName);
+
+      // const data = await fetchStockData(strategyName);
+      const description = await fetchStrategyDescription(strategyName);
+
+      if (description.length === 0) {
+        setError(`${strategyName} is not valid stategy name.`);
+        setCurrentStrategyDescription(null);
+      } else {
+        setCurrentStrategyDescription(description);
+      }
+    } catch (error) {
+      setError(`Failed to fetch stock data: ${error.message}`);
+      setCurrentStrategyDescription(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="App">
       <h1>Stock Data Analyzer</h1>
@@ -48,9 +75,15 @@ const App = () => {
           </p>
         </div>
       )}
-      
+
       {stockData && stockData.length > 0 ? (
-        <StockPlot data={stockData} stockName={currentStock} />
+        <StockPlot data={stockData}/>
+        // stockName={currentStock} 
+      ) : stockData && stockData.length === 0 ? (
+        <p className="no-data-message">No data available for this stock</p>
+      ) : null}
+      {stockData && stockData.length > 0 ? (
+        <Analytics onSubmit={handleStrategySubmit}/>
       ) : stockData && stockData.length === 0 ? (
         <p className="no-data-message">No data available for this stock</p>
       ) : null}
