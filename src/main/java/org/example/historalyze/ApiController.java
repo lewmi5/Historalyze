@@ -16,8 +16,8 @@ import java.util.Map;
 @RequestMapping("/api")
 public class ApiController {
     private boolean listWasRead = false;
-    String listContent;
-    String[] listContentCSV;
+    String[] listContent;
+    String listContentCSV;
 
     @GetMapping("/data")
     public ResponseEntity<Map<String, Object>> getData() {
@@ -33,10 +33,10 @@ public class ApiController {
         if(!listWasRead) {
             Path path = Paths.get("stocksdata/list.csv");
             try {
-                listContent = Files.readString(path);
-                listContentCSV = listContent.split(",");
+                listContentCSV = Files.readString(path);
+                listContent = listContentCSV.split(",");
             } catch (IOException e) {
-                listContent = "Error reading file: " + e.getMessage();
+                listContent[0] = "Error reading file: " + e.getMessage();
             }
         }
 
@@ -53,21 +53,19 @@ public class ApiController {
         Map<String, Object> response = new HashMap<>();
 
         boolean nameInList = false;
-        for(String name : listContentCSV) {
+        for(String name : listContent) {
             if(name == payload.get("name")) {
                 nameInList = true;
                 break;
             }
         }
 
-        Object firstValue = payload.get("name");
-        Object secondValue = payload.get("message");
-        System.out.println(firstValue);
-        System.out.println(secondValue);
+        Object name = payload.get("name");
+        System.out.println(name);
         response.put("received", payload);
         response.put("status", "success");
 
-        Path path = Paths.get("stocksdata/google_stock_history (1).csv");
+        Path path = Paths.get("stocksdata/" + name.toString() + ".csv");
         String content;
         try {
             content = Files.readString(path);
