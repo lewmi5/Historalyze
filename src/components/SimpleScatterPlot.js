@@ -11,7 +11,6 @@ const SimpleScatterPlot = () => {
   useEffect(() => {
     // Path to your CSV file in the public folder
     const csvFilePath = process.env.PUBLIC_URL + '/google_stock_history.csv';
-
     // Load and process the CSV file
     fetch(csvFilePath)
       .then(response => {

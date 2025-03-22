@@ -33,11 +33,12 @@ import ApiCommunication from "./services/ApiCommunication";
 
 const App = () => {
   return (
-    <div>
+    <div>      
       {/* <Header />
       <Home /> */}
       {/* <SimpleScatterPlot /> */}
       <ApiCommunication />
+      <SimpleScatterPlot />
       {/* <Footer /> */}
     </div>
   );

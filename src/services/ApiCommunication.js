@@ -7,14 +7,16 @@ function ApiCommunication() {
   const [backendData, setBackendData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [formData, setFormData] = useState({ name: '', message: '' });
+  const [formData, setFormData] = useState({ name: ''});
+  // const [formData, setFormData] = useState({ name: '', message: '' });
   const [submitResponse, setSubmitResponse] = useState(null);
 
   // Fetch data from Spring backend on component mount
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/data`);
+        const response = await axios.get(`${API_BASE_URL}/names`);
+        setBackendData(response.data);
         setLoading(false);
       } catch (err) {
         setError('Error fetching data from backend: ' + err.message);
@@ -61,7 +63,7 @@ function ApiCommunication() {
       </div>
       
       <div className="form-section">
-        <h3>Send Data to Backend:</h3>
+        <h3>Type valid ticker:</h3>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="name">Name:</label>
@@ -70,17 +72,6 @@ function ApiCommunication() {
               id="name"
               name="name"
               value={formData.name}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="message">Message:</label>
-            <textarea
-              id="message"
-              name="message"
-              value={formData.message}
               onChange={handleInputChange}
               required
             />
