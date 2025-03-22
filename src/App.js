@@ -1,45 +1,59 @@
-// import logo from './logo.svg';
-// import './App.css';
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-
-// export default App;
-
-import React from "react";
-import Home from "./pages/Home";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import SimpleScatterPlot from "./components/SimpleScatterPlot";
-import ApiCommunication from "./services/ApiCommunication";
+import React, { useState } from 'react';
+import StockForm from './components/StockForm';
+import StockPlot from './components/StockPlot';
+import { fetchStockData } from './services/apiService';
 
 const App = () => {
+  const [stockData, setStockData] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [currentStock, setCurrentStock] = useState('');
+
+  const handleStockSubmit = async (stockName) => {
+    try {
+      setError(null);
+      setLoading(true);
+      setCurrentStock(stockName);
+      
+      const data = await fetchStockData(stockName);
+      
+      if (data.historicalPrices.length === 0) {
+        setError(`No valid price data found for ${stockName}. The CSV file may be empty or in an unsupported format.`);
+        setStockData(null);
+      } else {
+        setStockData(data.historicalPrices);
+      }
+    } catch (error) {
+      setError(`Failed to fetch stock data: ${error.message}`);
+      setStockData(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div>      
-      {/* <Header />
-      <Home /> */}
-      {/* <SimpleScatterPlot /> */}
-      <ApiCommunication />
-      <SimpleScatterPlot />
-      {/* <Footer /> */}
+    <div className="App">
+      <h1>Stock Data Analyzer</h1>
+      <p className="subtitle">Fetch historical stock data from the Spring backend</p>
+      
+      <StockForm onSubmit={handleStockSubmit} />
+      
+      {loading && <div className="loading">Loading stock data...</div>}
+      
+      {error && (
+        <div className="error-container">
+          <p className="error-message">{error}</p>
+          <p className="error-help">
+            Check that the CSV file for "{currentStock}" exists on the server and has the correct format.
+          </p>
+        </div>
+      )}
+      
+      {stockData && stockData.length > 0 ? (
+        <StockPlot data={stockData} stockName={currentStock} />
+      ) : stockData && stockData.length === 0 ? (
+        <p className="no-data-message">No data available for this stock</p>
+      ) : null}
     </div>
   );
 };

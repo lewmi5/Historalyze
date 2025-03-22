@@ -42,7 +42,7 @@ function ApiCommunication() {
     setSubmitResponse(null);
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/submit`, formData);
+      const response = await axios.post(`${API_BASE_URL}/prices`, formData);
       setSubmitResponse(response.data);
     } catch (err) {
       setError('Error submitting data: ' + err.message);
