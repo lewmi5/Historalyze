@@ -144,6 +144,21 @@ export const fetchStrategyNames = async () => {
   }
 };
 
+export const fetchStrategyNames = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/strategy_names`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch stock names');
+    }
+
+    const data = await response.json();
+    return data.names;
+  } catch (error) {
+    console.error('Error fetching stock names:', error);
+    throw error;
+  }
+};
+
 // Custom parser for the specific CSV format provided
 const parseCustomCSVFormat = (csvContent) => {
   // Split the CSV content into lines
