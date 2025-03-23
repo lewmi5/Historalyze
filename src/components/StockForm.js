@@ -33,6 +33,11 @@ const StockForm = ({ onSubmit }) => {
     }
   };
 
+  const handleStockClick = (stock) => {
+    setStockName(stock);
+    setTimeout(() => onSubmit(stock), 0); // Automatically submit after selecting a stock
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -53,7 +58,6 @@ const StockForm = ({ onSubmit }) => {
             ))}
           </datalist>
         </div>
-        <button type="submit" disabled={loading}>Get Stock Data</button>
       </form>
       
       {loading && <p>Loading available stocks...</p>}
@@ -67,7 +71,8 @@ const StockForm = ({ onSubmit }) => {
               <span 
                 key={index} 
                 className="stock-tag"
-                onClick={() => setStockName(stock)}
+                onClick={() => handleStockClick(stock)}
+                style={{ cursor: 'pointer', textDecoration: 'underline', marginRight: '10px' }}
               >
                 {stock}
               </span>

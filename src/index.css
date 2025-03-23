@@ -1,129 +1,70 @@
-/* body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-} */
-
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  padding: 20px;
-  background-color: #f5f5f5;
-}
-
+/* Main App Styles */
 .App {
-  max-width: 800px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 1200px;
   margin: 0 auto;
-  background-color: white;
+  padding: 20px;
+  color: #333;
+}
+
+h1 {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #7f8c8d;
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+/* Form Styles */
+form {
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
-  color: #333;
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-.subtitle {
-  text-align: center;
-  color: #666;
-  margin-top: 0;
-  margin-bottom: 20px;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-}
-
-form div {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
 label {
-  width: 100px;
-  margin-right: 10px;
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
 }
 
-input {
-  flex: 1;
-  padding: 8px;
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
   border: 1px solid #ddd;
   border-radius: 4px;
+  margin-bottom: 15px;
 }
 
 button {
-  padding: 10px 15px;
-  background-color: #4CAF50;
+  background-color: #3498db;
   color: white;
   border: none;
+  padding: 10px 15px;
+  font-size: 16px;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 16px;
-  margin-top: 10px;
-  align-self: flex-start;
+  transition: background-color 0.3s;
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #2980b9;
 }
 
-button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-}
-
-.loading {
-  text-align: center;
-  margin: 20px 0;
-  color: #666;
-}
-
-.error-container {
-  background-color: #ffebee;
-  border-radius: 4px;
-  padding: 15px;
-  margin: 15px 0;
-}
-
-.error-message {
-  color: #d32f2f;
-  margin: 0 0 10px 0;
+button.active {
+  background-color: #2980b9;
   font-weight: bold;
 }
 
-.error-help {
-  color: #666;
-  margin: 0;
-  font-size: 14px;
-}
-
-.no-data-message {
-  text-align: center;
-  color: #666;
-  font-style: italic;
-  padding: 20px;
-  background-color: #f5f5f5;
-  border-radius: 4px;
-}
-
+/* Available Stocks */
 .available-stocks {
   margin-top: 20px;
   background-color: #f9f9f9;
@@ -134,22 +75,63 @@ button:disabled {
 .stock-tag-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .stock-tag {
   background-color: #e0e0e0;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 5px 10px;
+  border-radius: 15px;
   font-size: 14px;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .stock-tag:hover {
-  background-color: #d0d0d0;
+  background-color: #3498db;
+  color: white;
 }
 
-/* Chart styling */
+/* Loading and Error States */
+.loading {
+  text-align: center;
+  margin: 20px 0;
+  padding: 10px;
+  background-color: #e5f5ff;
+  border-radius: 4px;
+  color: #0066cc;
+}
+
+.error-container {
+  background-color: #ffeeee;
+  border-left: 4px solid #ff5555;
+  padding: 15px;
+  margin: 20px 0;
+  border-radius: 0 4px 4px 0;
+}
+
+.error-message {
+  color: #cc0000;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.error-help {
+  color: #555;
+  margin-top: 0;
+}
+
+.no-data-message {
+  text-align: center;
+  padding: 30px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  color: #7f8c8d;
+  font-style: italic;
+}
+
+/* Chart Styles */
 .chart-header {
   display: flex;
   justify-content: space-between;
@@ -159,80 +141,193 @@ button:disabled {
 
 .time-range-buttons {
   display: flex;
-  gap: 8px;
+  gap: 10px;
 }
 
 .time-range-buttons button {
-  background-color: #e0e0e0;
-  color: #333;
-  border: none;
   padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
   font-size: 14px;
-  margin-top: 0;
-}
-
-.time-range-buttons button:hover {
-  background-color: #d0d0d0;
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ddd;
 }
 
 .time-range-buttons button.active {
-  background-color: #4CAF50;
+  background-color: #3498db;
   color: white;
+  border-color: #3498db;
 }
 
+/* Stats Container */
 .stats-container {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
   margin-bottom: 20px;
-  flex-wrap: wrap;
-  gap: 10px;
 }
 
 .stat-box {
   background-color: #f9f9f9;
-  padding: 12px 15px;
-  border-radius: 4px;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  flex: 1;
-  min-width: 100px;
-  text-align: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  align-items: center;
 }
 
 .stat-label {
-  color: #666;
   font-size: 14px;
+  color: #7f8c8d;
   margin-bottom: 5px;
 }
 
 .stat-value {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .positive {
-  color: #4CAF50;
+  color: #27ae60;
 }
 
 .negative {
-  color: #f44336;
-}
-
-.no-data-message {
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-  color: #666;
-  font-style: italic;
+  color: #e74c3c;
 }
 
 .data-points-info {
   text-align: right;
-  color: #666;
-  font-size: 12px;
+  color: #7f8c8d;
+  font-size: 14px;
   margin-top: 10px;
+}
+
+/* Available Strategies */
+.available-strategies {
+  margin-top: 20px;
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+
+.strategy-tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+
+.strategy-tag {
+  background-color: #e0e0e0;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.strategy-tag:hover {
+  background-color: #3498db;
+  color: white;
+}
+
+/* Strategy Description */
+.strategy-description-wrapper {
+  background-color: #f5f7fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px 0;
+  border-left: 4px solid #3498db;
+}
+
+/* Analytics Component */
+.analytics-container {
+  margin: 20px 0;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.analytics-container h3 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+/* Parameters Form */
+.parameters-form {
+  margin: 20px 0;
+  padding: 20px;
+  background-color: #f0f7ff;
+  border-radius: 8px;
+}
+
+.parameters-form h3 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+.parameters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.parameter-field {
+  margin-bottom: 15px;
+}
+
+/* Analysis Result */
+.analysis-result {
+  margin: 20px 0;
+  padding: 20px;
+  background-color: #edf7ed;
+  border-radius: 8px;
+  border-left: 4px solid #27ae60;
+}
+
+.analysis-result h3 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+.result-value {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .chart-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .time-range-buttons {
+    margin-top: 10px;
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .stats-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .time-range-buttons {
+    flex-wrap: wrap;
+  }
+  
+  .time-range-buttons button {
+    flex: 1 0 40%;
+    margin-bottom: 10px;
+  }
 }
