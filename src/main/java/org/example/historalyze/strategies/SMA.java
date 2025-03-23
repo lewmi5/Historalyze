@@ -7,7 +7,8 @@ import java.util.ArrayList;
 
 public class SMA extends Strategy {
     public static final String name = "SMA";
-    private static final String description = "SMA params(format:[Short_MA] [Long_MA])";
+    public static final String description = "The SMA (Simple Moving Average) strategy identifies trends by averaging past prices over specified periods. Use format: [Short_MA] [Long_MA] (e.g., 10 50), where Short_MA is the fast-moving average and Long_MA is the slow-moving average. A buy signal occurs when the Short_MA crosses above the Long_MA, indicating an uptrend, while a sell signal occurs when it crosses below, signaling a downtrend.";
+
     private int shortMA;
     private int longMA;
 
@@ -21,7 +22,8 @@ public class SMA extends Strategy {
     }
 
     @Override
-    public float Calculate() {
+    public float Calculate(String parameters) {
+        this.setParams(parameters);
         if (prices.getSize() < longMA) {
             throw new IllegalArgumentException("Not enough price data for the selected MA periods");
         }
@@ -116,8 +118,7 @@ public class SMA extends Strategy {
         return description;
     }
 
-    @Override
-    public void setParams(String params) {
+    private void setParams(String params) {
         String[] parameters = params.trim().split("\\s+");
         if (parameters.length != 2) {
             throw new IllegalArgumentException("SMA strategy requires exactly 2 parameters: Short_MA Long_MA");

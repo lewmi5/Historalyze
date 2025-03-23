@@ -10,8 +10,7 @@ public abstract class Strategy {
         this.prices = prices;
     }
 
-    public abstract float Calculate();
+    public abstract float Calculate(String parameters);
     public abstract String getDescription();
-    public abstract void setParams(String params);
     public abstract String getCustomName();
 }

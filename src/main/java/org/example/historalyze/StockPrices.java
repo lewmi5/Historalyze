@@ -1,6 +1,12 @@
 package org.example.historalyze;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+
+import static org.example.historalyze.ExtractPricesFromCSV.getColumnValues;
 
 public class StockPrices {
     private final ArrayList<Float> open;
@@ -17,12 +23,19 @@ public class StockPrices {
         size = open.size();
     }
 
-    public StockPrices() {
-        this.open = new ArrayList<>();
-        this.close = new ArrayList<>();
-        this.low = new ArrayList<>();
-        this.high = new ArrayList<>();
-        size = 0;
+    public StockPrices(String stockPath, String stockName) throws IOException {
+        Path path = Paths.get(stockPath);
+        File file = path.toFile();
+
+        if(!file.exists()) {
+            StockPriceDownloader.downloadHistoricalData(stockName);
+        }
+
+        this.open = getColumnValues(file, 4);
+        this.close = getColumnValues(file, 1);
+        this.low = getColumnValues(file, 3);
+        this.high = getColumnValues(file, 2);
+        this.size = open.size();
     }
 
     public float getOpen(int i) {
