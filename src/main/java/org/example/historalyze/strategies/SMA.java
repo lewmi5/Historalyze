@@ -5,6 +5,10 @@ import org.example.historalyze.Strategy;
 
 import java.util.ArrayList;
 
+/**
+ * Implements the Simple Moving Average (SMA) trading strategy.
+ * The SMA strategy generates buy and sell signals based on the crossover of short-term and long-term moving averages.
+ */
 public class SMA extends Strategy {
     public static final String name = "SMA";
     public static final String description = "The SMA (Simple Moving Average) strategy identifies trends by averaging past prices over specified periods. Use format: [Short_MA] [Long_MA] (e.g., 10 50), where Short_MA is the fast-moving average and Long_MA is the slow-moving average. A buy signal occurs when the Short_MA crosses above the Long_MA, indicating an uptrend, while a sell signal occurs when it crosses below, signaling a downtrend.";
@@ -20,7 +24,13 @@ public class SMA extends Strategy {
         this.buySignals = new ArrayList<>();
         this.sellSignals = new ArrayList<>();
     }
-
+    /**
+     * Calculates the return multiplier based on the SMA strategy.
+     *
+     * @param parameters The parameters in the format "Short_MA Long_MA" (e.g., "10 50").
+     * @return The return multiplier, representing the profit factor from executing the strategy.
+     * @throws IllegalArgumentException If there is insufficient price data or incorrect parameter format.
+     */
     @Override
     public float Calculate(String parameters) {
         this.setParams(parameters);
@@ -40,7 +50,11 @@ public class SMA extends Strategy {
         // Oblicz mnożnik zwrotu
         return calculateReturnMultiplier(closePrices);
     }
-
+    /**
+     * Generates buy and sell signals based on the SMA crossover strategy.
+     *
+     * @param prices The list of closing prices used for signal generation.
+     */
     private void generateSignals(ArrayList<Float> prices) {
         buySignals.clear();
         sellSignals.clear();
@@ -73,7 +87,13 @@ public class SMA extends Strategy {
             previousCrossAbove = crossAbove;
         }
     }
-
+    /**
+     * Calculates a moving average over a given period.
+     *
+     * @param prices The list of closing prices.
+     * @param period The number of periods over which to calculate the moving average.
+     * @return A list of calculated moving average values.
+     */
     private ArrayList<Float> calculateMA(ArrayList<Float> prices, int period) {
         ArrayList<Float> maValues = new ArrayList<>();
 
@@ -88,6 +108,12 @@ public class SMA extends Strategy {
         return maValues;
     }
 
+    /**
+     * Calculates the return multiplier based on the generated buy and sell signals.
+     *
+     * @param prices The list of closing prices.
+     * @return The return multiplier, representing the profit factor from executing the strategy.
+     */
     private float calculateReturnMultiplier(ArrayList<Float> prices) {
         boolean holding = false;
         float entryPrice = 0;
@@ -118,13 +144,21 @@ public class SMA extends Strategy {
         return description;
     }
 
+    /**
+     * Parses and sets the SMA parameters.
+     *
+     * @param params The input parameters in format "Short_MA Long_MA".
+     * @throws IllegalArgumentException If the format is incorrect or values are invalid.
+     */
     private void setParams(String params) {
         String[] parameters = params.trim().split("\\s+");
+        // Checking the corectness of parameters
         if (parameters.length != 2) {
             throw new IllegalArgumentException("SMA strategy requires exactly 2 parameters: Short_MA Long_MA");
         }
 
         try {
+            // Setting shortMA and longMA values
             shortMA = Integer.parseInt(parameters[0]);
             longMA = Integer.parseInt(parameters[1]);
 

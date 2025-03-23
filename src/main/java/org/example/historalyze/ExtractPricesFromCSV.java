@@ -11,21 +11,6 @@ import java.util.List;
 
 
 public class ExtractPricesFromCSV {
-
-    public static void main(String[] args) {
-        // Example usage
-        File file = new File("your_file.csv");  // Replace with your CSV file path
-        int columnIndex = 2;  // Column index you want to extract (0-based)
-
-        // Call the method to get the column values
-        ArrayList<Float> columnValues = getColumnValues(file, columnIndex);
-
-        // Print the column values
-        for (Float value : columnValues) {
-            System.out.println(value);
-        }
-    }
-
     /**
      * Method to extract column values from a CSV file.
      * @param file The CSV file as a File object.

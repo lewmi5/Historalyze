@@ -1,7 +1,5 @@
 package org.example.historalyze;
 
-import java.util.ArrayList;
-
 public abstract class Strategy {
     // Each class extending this class must have public
     protected final StockPrices prices;

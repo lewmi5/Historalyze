@@ -23,12 +23,21 @@ public class StockPrices {
         size = open.size();
     }
 
-    public StockPrices(String stockPath, String stockName) throws IOException {
+    public StockPrices(String stockPath, String stockName, Path stockDataPath) {
         Path path = Paths.get(stockPath);
         File file = path.toFile();
 
         if(!file.exists()) {
-            StockPriceDownloader.downloadHistoricalData(stockName);
+            try {
+                StockPriceDownloader.downloadHistoricalData(stockName, stockDataPath);
+            } catch (IOException e) {
+                this.open = new ArrayList<>();
+                this.close = new ArrayList<>();
+                this.low = new ArrayList<>();
+                this.high = new ArrayList<>();
+                this.size = 0;
+                return;
+            }
         }
 
         this.open = getColumnValues(file, 4);
