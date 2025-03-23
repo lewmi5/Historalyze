@@ -14,15 +14,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.example.historalyze.ExtractPricesFromCSV.getColumnValues;
+import static org.example.historalyze.StrategyFactory.createStrategy;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api")
 public class ApiController {
     private boolean listWasRead = false;
-    String[] listContent;
-    String listContentCSV;
+    private String[] listContent;
+    private String listContentCSV;
+    private String stockName;
+    private StockPrices prices;
+    private String strategyName;
+    private String stockPath;
 
     @GetMapping("/data")
     public ResponseEntity<Map<String, Object>> getData() {
@@ -40,6 +44,7 @@ public class ApiController {
             try {
                 listContentCSV = Files.readString(path);
                 listContent = listContentCSV.split(",");
+                listWasRead = true;
             } catch (IOException e) {
                 listContent[0] = "Error reading file: " + e.getMessage();
             }
@@ -53,7 +58,7 @@ public class ApiController {
     }
 
     @GetMapping("/strategy_names")
-    public ResponseEntity<Map<String, Object>> getStrategyNames() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public ResponseEntity<Map<String, Object>> getStrategyNames() {
         String packageName = "org.example.historalyze.strategies";
         String folderPath = "target/classes/org/example/historalyze/strategies";
 
@@ -87,9 +92,30 @@ public class ApiController {
         }
 
         Map<String, Object> response = new HashMap<>();
-//        response.put("names", listContent);
         response.put("names", names);
         response.put("timestamp", System.currentTimeMillis());
+
+        return ResponseEntity.ok(response);
+    }
+
+    //returns the description for a given strategy
+    @PostMapping("/strategy_descritption")
+    public ResponseEntity<Map<String, Object>> getStrategyDescriptions(@RequestBody Map<String, String> payload) {
+        strategyName = payload.get("name");
+        stockPath = "stocksdata/" + stockName + ".csv";
+        Strategy temp;
+        try {
+            prices = new StockPrices(stockPath, stockName);
+            temp = createStrategy(strategyName, prices);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        assert temp != null;
+        response.put("description", temp.getDescription());
+        System.out.println(temp.getDescription());
+//        response.put("timestamp", System.currentTimeMillis());
 
         return ResponseEntity.ok(response);
     }
@@ -101,20 +127,23 @@ public class ApiController {
 
         boolean nameInList = false;
         for(String name : listContent) {
-            if(name == payload.get("name")) {
+            if(name.equals(payload.get("name").toString())) {
+                stockName = name;
+                stockPath = "stocksdata/" + stockName + ".csv";
+                prices = new StockPrices(stockPath, stockName);
+                System.out.println("Stock Name: " + stockName);
                 nameInList = true;
                 break;
             }
         }
 
-        Object name = payload.get("name");
-        System.out.println(name);
+        System.out.println(stockName);
         response.put("received", payload);
         response.put("status", "success");
-        String stockPath = "stocksdata/" + name.toString() + ".csv";
+        String stockPath = "stocksdata/" + stockName + ".csv";
         Path path = Paths.get(stockPath);
         if(!Files.exists(path)) {
-            StockPriceDownloader.downloadHistoricalData(name.toString());
+            StockPriceDownloader.downloadHistoricalData(stockName);
         }
 
 
@@ -131,65 +160,22 @@ public class ApiController {
     }
 
     @PostMapping("/analyze")
-    public ResponseEntity<Map<String, Object>> simulateStrategy(@RequestBody Map<String, Object> payload) throws IOException {
+    public ResponseEntity<Map<String, Object>> simulateStrategy(@RequestBody Map<String, Object> payload) {
         // Process the data received from React
         Map<String, Object> response = new HashMap<>();
+        String params = payload.get("params").toString();
+        Strategy currentStrategy = createStrategy(strategyName, prices);
 
-        Object strategy = payload.get("strategy");
-        System.out.println(strategy);
+        assert currentStrategy != null;
+        float result = currentStrategy.Calculate(params);
+        System.out.println(result);
+        System.out.println("ds;lakfjf;sjdl");
         response.put("received", payload);
+        response.put("result", result);
+
+        System.out.println(payload);
         response.put("status", "success");
 
-        String stockPath = "stocksdata/" + strategy.toString() + ".csv";
-        Path path = Paths.get(stockPath);
-        File file = path.toFile();
-
-//        if(!Files.exists(path)) {
-        if(!file.exists()) {
-            StockPriceDownloader.downloadHistoricalData(strategy.toString());
-        }
-
-
-        String content;
-        try {
-            content = Files.readString(path);
-        } catch (IOException e) {
-            content = "Error reading file: " + e.getMessage();
-//            throw new RuntimeException(e);
-        }
-
-        StockPrices prices = new StockPrices(getColumnValues(file, 4), getColumnValues(file, 1), getColumnValues(file, 3), getColumnValues(file, 2));
-        ArrayList<Float> pricesClose = getColumnValues(file, 1);
-
-        System.out.println(pricesClose.get(0));
-
-        response.put("content", content);
         return ResponseEntity.ok(response);
     }
-
-    @PostMapping("/submit")
-    public ResponseEntity<Map<String, Object>> submitData(@RequestBody Map<String, Object> payload) {
-        // Process the data received from React
-        Map<String, Object> response = new HashMap<>();
-
-        Object firstValue = payload.get("name");
-        Object secondValue = payload.get("message");
-        System.out.println(firstValue);
-        System.out.println(secondValue);
-        response.put("received", payload);
-        response.put("status", "success");
-
-        Path path = Paths.get("stocksdata/google_stock_history (1).csv");
-        String content;
-        try {
-            content = Files.readString(path);
-        } catch (IOException e) {
-            content = "Error reading file: " + e.getMessage();
-//            throw new RuntimeException(e);
-        }
-
-        response.put("content", content);
-        return ResponseEntity.ok(response);
-    }
-
 }
