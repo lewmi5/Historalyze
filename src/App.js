@@ -3,6 +3,7 @@ import StockForm from './components/StockForm';
 import StockPlot from './components/StockPlot';
 import Analytics from './components/Analytics';
 import Parameters from './components/Parameters';
+import AnalysisResult from './components/AnalysisResult';
 import { fetchStockData } from './services/apiService';
 import { fetchStrategyDescription } from './services/apiService';
 import { fetchAnalysisResult } from './services/apiService';
@@ -44,7 +45,6 @@ const App = () => {
       setLoading(true);
       setCurrentStrategy(strategyName);
 
-      // const data = await fetchStockData(strategyName);
       const description = await fetchStrategyDescription(strategyName);
 
       if (description.length === 0) {
@@ -66,15 +66,12 @@ const App = () => {
       setError(null);
       setLoading(true);
 
-      // const data = await fetchStockData(strategyName);
       const response = await fetchAnalysisResult(parameters);
 
       if (response.length === 0) {
         setError(`${strategyName} is not valid stategy name.`);
         setAnalysisResult(null);
-        // setCurrentStrategyDescription(null);
       } else {
-        // setCurrentStrategyDescription(description);
         setAnalysisResult(response);
       }
     } catch (error) {
@@ -89,12 +86,9 @@ const App = () => {
   return (
     <div className="App">
       <h1>Stock Data Analyzer</h1>
-      <p className="subtitle">Fetch historical stock data from the Spring backend</p>
-
+      <p className="subtitle">See how much you could have gained. 💸💸💸</p>
       <StockForm onSubmit={handleStockSubmit} />
-      
       {loading && <div className="loading">Loading stock data...</div>}
-      
       {error && (
         <div className="error-container">
           <p className="error-message">{error}</p>
@@ -104,39 +98,30 @@ const App = () => {
         </div>
       )}
 
-{stockData && stockData.length > 0 ? (
-  <StockPlot data={stockData}/>
-) : stockData && stockData.length === 0 ? (
-  <p className="no-data-message">No data available for this stock</p>
-) : null}
-
-{stockData && stockData.length > 0 ? (
-  <Analytics onSubmit={handleStrategySubmit}/>
-) : stockData && stockData.length === 0 ? (
-  <p className="no-data-message">No data available for this strategy</p>
-) : null}
-
-{currentStrategyDescription && currentStrategyDescription.length > 0 ? (
-  <div>
-    <div className="strategy-description-wrapper">
-    {currentStrategyDescription}
-    </div>
-<Parameters onSubmit={handleParametersSubmit}/>
-  </div>
-) : currentStrategyDescription && currentStrategyDescription.length === 0 ? (
-  <p className="no-data-message">No data available for this strategy</p>
-) : null}
-
-
-
-{analysisResult ? (
-        <div className="analysis-result">
-          <h3>Analysis Result</h3>
-          <p className="result-value">Result: {analysisResult}</p>
-        </div>
-      ) : analysisResult ? (
-        <p className="no-data-message">No result value available for this analysis</p>
+      {stockData && stockData.length > 0 ? (
+        <StockPlot data={stockData}/>
+      ) : stockData && stockData.length === 0 ? (
+        <p className="no-data-message">No data available for this stock</p>
       ) : null}
+
+      {stockData && stockData.length > 0 ? (
+        <Analytics onSubmit={handleStrategySubmit}/>
+      ) : stockData && stockData.length === 0 ? (
+        <p className="no-data-message">No data available for this strategy</p>
+      ) : null}
+
+      {currentStrategyDescription && currentStrategyDescription.length > 0 ? (
+        <div>
+          <div className="strategy-description-wrapper">
+            {currentStrategyDescription}
+          </div>
+          <Parameters onSubmit={handleParametersSubmit}/>
+        </div>
+      ) : currentStrategyDescription && currentStrategyDescription.length === 0 ? (
+        <p className="no-data-message">No data available for this strategy</p>
+      ) : null}
+
+      <AnalysisResult analysisResult={analysisResult} />
     </div>
   );
 };

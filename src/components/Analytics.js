@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { fetchStrategyNames } from '../services/apiService';
+import React, {useEffect, useState} from 'react';
 
-const Analytics = ({ onSubmit }) => {
+import {fetchStrategyNames} from '../services/apiService';
+
+const Analytics = ({onSubmit}) => {
   const [strategyName, setStrategyName] = useState('');
   const [availableStrategies, setAvailableStrategies] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -33,7 +34,6 @@ const Analytics = ({ onSubmit }) => {
     }
   };
 
-
   const handleStrategyClick = (strategy) => {
     setStrategyName(strategy);
     setTimeout(() => onSubmit(strategy), 0); // Automatically submit after selecting a strategy
@@ -44,7 +44,7 @@ const Analytics = ({ onSubmit }) => {
     <div>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="strategyName">Strategy Symbol:</label>
+          <label htmlFor='strategyName'>Strategy Symbol:</label>
           <input
             type="text"
             id="strategyName"
@@ -54,7 +54,7 @@ const Analytics = ({ onSubmit }) => {
             list="strategyOptions"
             required
           />
-          <datalist id="strategyOptions">
+          <datalist id='strategyOptions'>
             {availableStrategies.map((strategy, index) => (
               <option key={index} value={strategy} />
             ))}
@@ -66,25 +66,22 @@ const Analytics = ({ onSubmit }) => {
       {error && <p style={{ color: 'red' }}>{error}</p>}
       
       {availableStrategies.length > 0 && (
-        <div className="available-strategies">
+        <div className='available-strategies'>
           <p>Available strategies: </p>
-        
-        <div className="strategy-tag-container">
-  
-            {availableStrategies.slice(0, 10).map((strategy, index) => (
-              <span 
-                key={index} 
-                className="strategy-tag"
-                onClick={() => handleStrategyClick(strategy)}
-                style={{ cursor: 'pointer', textDecoration: 'underline', marginRight: '10px' }}
-              >
-                {strategy}
-              </span>
-            ))}
-            {availableStrategies.length > 10 && <span>and {availableStrategies.length - 10} more...</span>}
+          <div className="strategy-tag-container">      
+              {availableStrategies.slice(0, 10).map((strategy, index) => (
+                <span 
+                  key={index} 
+                  className="strategy-tag"
+                  onClick={() => handleStrategyClick(strategy)}
+                  style={{ cursor: 'pointer', textDecoration: 'underline', marginRight: '10px' }}
+                >
+                  {strategy}
+                </span>
+              ))}
+              {availableStrategies.length > 10 && <span>and {availableStrategies.length - 10} more...</span>}
+          </div>
         </div>
-        </div>
-
       )}
     </div>
   );

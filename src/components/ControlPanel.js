@@ -2,7 +2,7 @@ import React from "react";
 
 const ControlPanel = () => {
   return (
-<div className="api-communication">      
+    <div className="api-communication">      
       <div className="data-section">
         <h3>Data from Backend:</h3>
         {backendData && (
@@ -24,7 +24,6 @@ const ControlPanel = () => {
               required
             />
           </div>
-          
           <div className="form-group">
             <label htmlFor="message">Message:</label>
             <textarea
@@ -35,10 +34,8 @@ const ControlPanel = () => {
               required
             />
           </div>
-          
           <button type="submit">Submit to Backend</button>
         </form>
-        
         {submitResponse && (
           <div className="response">
             <h4>Response:</h4>

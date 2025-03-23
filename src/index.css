@@ -299,6 +299,20 @@ button.active {
   font-weight: 600;
 }
 
+.result-value.positive {
+  color: green;
+}
+
+.result-value.negative {
+  color: red;
+}
+
+.no-data-message {
+  font-style: italic;
+  color: gray;
+}
+
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
   .chart-header {

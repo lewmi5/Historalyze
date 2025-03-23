@@ -60,18 +60,8 @@ export const fetchStrategyDescription = async (strategyName) => {
       body: JSON.stringify({ name: strategyName }),
     });
 
-    // if (!response.ok) {
-    //   throw new Error('Failed to fetch stock data');
-    // }
-
     const data = await response.json();
-
-    // // Check if we received CSV content from the backend
-    // const csvContent = data.content;
-    // if (!csvContent || csvContent.startsWith('Error')) {
-    //   throw new Error(csvContent || 'No data returned from server');
-    // }
-      return data.description;
+    return data.description;
   } catch (error) {
     console.error('Error fetching stock data:', error);
     throw error;
@@ -95,18 +85,13 @@ export const fetchAnalysisResult = async (parameters) => {
       body: JSON.stringify({ params: parameters }),
     });
 
-    // if (!response.ok) {
-    //   throw new Error('Failed to fetch stock data');
-    // }
+    if (!response.ok) {
+      throw new Error('Failed to fetch stock data');
+    }
 
     const data = await response.json();
 
-    // // Check if we received CSV content from the backend
-    // const csvContent = data.content;
-    // if (!csvContent || csvContent.startsWith('Error')) {
-    //   throw new Error(csvContent || 'No data returned from server');
-    // }
-      return data.result;
+    return data.result;
   } catch (error) {
     console.error('Error fetching stock data:', error);
     throw error;
@@ -116,26 +101,11 @@ export const fetchAnalysisResult = async (parameters) => {
 // Helper function to fetch available stock names
 export const fetchStockNames = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/names`);
+    const response = await fetch(`${API_BASE_URL}/stock_names`);
     if (!response.ok) {
       throw new Error('Failed to fetch stock names');
     }
     
-    const data = await response.json();
-    return data.names;
-  } catch (error) {
-    console.error('Error fetching stock names:', error);
-    throw error;
-  }
-};
-
-export const fetchStrategyNames = async () => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/strategy_names`);
-    if (!response.ok) {
-      throw new Error('Failed to fetch stock names');
-    }
-
     const data = await response.json();
     return data.names;
   } catch (error) {
