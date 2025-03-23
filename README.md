@@ -56,5 +56,5 @@ The application follows a client-server architecture:
 | `/api/analyze` | POST | Calculates profit based on selected strategy and parameters |
 
 ## Contributors
-- [Kuba Siwiec]([https://github.com/YourUsername](https://github.com/jakub-siwiec-3))
-- [Michał Lewandowski]([https://github.com/Contributor1](https://github.com/lewmi5))
+- [Kuba Siwiec](https://github.com/jakub-siwiec-3)
+- [Michał Lewandowski](https://github.com/lewmi5)
